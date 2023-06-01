@@ -1,21 +1,21 @@
-package com.publicwifisearch.domain.publicWifi;
+package com.publicWifiSearch.domain.publicWifi;
 
 import com.google.gson.*;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-
+@Getter
 @RequiredArgsConstructor
-public class PublicWifiData {
+public class PublicWifiDto {
     @SerializedName("row")
     @Expose
     private List<PublicWifi> publicWifiData;
-    private JsonObject publicOpenApiData;
-    private String openApiURL;
-    public PublicWifiData(List<PublicWifi> publicWifiData) {
+
+    public PublicWifiDto(List<PublicWifi> publicWifiData) {
         this.publicWifiData = publicWifiData;
     }
 

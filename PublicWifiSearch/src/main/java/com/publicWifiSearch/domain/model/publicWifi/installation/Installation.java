@@ -1,7 +1,8 @@
-package com.publicwifisearch.domain.publicWifi.installation;
+package com.publicWifiSearch.domain.model.publicWifi.installation;
 
 import com.google.gson.annotations.JsonAdapter;
-import com.publicwifisearch.domain.publicWifi.json.InstallationDeserializer;
+
+import com.publicWifiSearch.domain.dto.openAPI.jsonParser.InstallationDeserializer;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

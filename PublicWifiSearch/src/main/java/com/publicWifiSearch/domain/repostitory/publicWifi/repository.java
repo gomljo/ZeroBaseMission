@@ -1,4 +1,4 @@
-package com.publicwifisearch.domain.publicWifi;
+package com.publicWifiSearch.domain.publicWifi;
 
 public interface repository {
     void save();

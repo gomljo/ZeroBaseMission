@@ -1,7 +1,7 @@
-package com.publicwifisearch.domain.publicWifi.address;
+package com.publicWifiSearch.domain.publicWifi.address;
 
-import com.publicwifisearch.domain.dbConnection.SqliteConnectionMaker;
-import com.publicwifisearch.domain.publicWifi.repository;
+import com.publicWifiSearch.domain.dbConnection.SqliteConnectionMaker;
+import com.publicWifiSearch.domain.publicWifi.repository;
 
 import java.sql.Connection;
 
