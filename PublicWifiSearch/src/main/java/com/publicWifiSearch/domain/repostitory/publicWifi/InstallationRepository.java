@@ -1,6 +1,4 @@
-package com.publicWifiSearch.domain.publicWifi.installation;
-
-import com.publicWifiSearch.domain.publicWifi.repository;
+package com.publicWifiSearch.domain.repostitory.publicWifi;
 
 public class InstallationRepository implements repository {
 
