@@ -1,10 +1,10 @@
-package com.publicWifiSearch.domain.openAPI.jsonParser;
+package com.publicWifiSearch.domain.dto.openAPI.jsonParser;
 
 import com.google.gson.*;
-import com.publicWifiSearch.domain.publicWifi.PublicWifi;
-import com.publicWifiSearch.domain.publicWifi.address.Address;
-import com.publicWifiSearch.domain.publicWifi.installation.Installation;
-import com.publicWifiSearch.domain.publicWifi.wifi.Wifi;
+import com.publicWifiSearch.domain.model.publicWifi.PublicWifi;
+import com.publicWifiSearch.domain.model.publicWifi.address.Address;
+import com.publicWifiSearch.domain.model.publicWifi.installation.Installation;
+import com.publicWifiSearch.domain.model.publicWifi.wifi.Wifi;
 
 import java.lang.reflect.Type;
 

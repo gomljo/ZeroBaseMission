@@ -1,8 +1,8 @@
-package com.publicWifiSearch.domain.publicWifi;
+package com.publicWifiSearch.domain.dto;
 
-import com.google.gson.*;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.publicWifiSearch.domain.model.publicWifi.PublicWifi;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

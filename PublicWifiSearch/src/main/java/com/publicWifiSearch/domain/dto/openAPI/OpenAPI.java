@@ -1,9 +1,9 @@
-package com.publicWifiSearch.domain.openAPI;
+package com.publicWifiSearch.domain.dto.openAPI;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.publicWifiSearch.domain.publicWifi.PublicWifiDto;
+import com.publicWifiSearch.domain.dto.PublicWifiDto;
 
 import java.io.BufferedReader;
 import java.io.IOException;

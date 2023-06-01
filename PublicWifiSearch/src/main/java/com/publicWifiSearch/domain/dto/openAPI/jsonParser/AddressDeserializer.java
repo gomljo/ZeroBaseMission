@@ -1,7 +1,7 @@
-package com.publicWifiSearch.domain.openAPI.jsonParser;
+package com.publicWifiSearch.domain.dto.openAPI.jsonParser;
 
 import com.google.gson.*;
-import com.publicWifiSearch.domain.publicWifi.address.Address;
+import com.publicWifiSearch.domain.model.publicWifi.address.Address;
 
 import java.lang.reflect.Type;
 

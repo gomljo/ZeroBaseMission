@@ -1,4 +1,4 @@
-package com.publicWifiSearch.domain.openAPI;
+package com.publicWifiSearch.domain.dto.openAPI;
 
 public enum UrlElement {
 
