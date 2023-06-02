@@ -1,17 +1,13 @@
-package com.publicWifiSearch.domain.model.publicWifi.address;
+package com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.address;
 
-
-import com.google.gson.annotations.JsonAdapter;
-
-import com.publicWifiSearch.domain.dto.openAPI.jsonParser.AddressDeserializer;
+import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.PublicWifiDetail;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-@JsonAdapter(AddressDeserializer.class)
-public class Address {
+public class Address implements PublicWifiDetail {
 
     private String district;
     private String roadAddress;

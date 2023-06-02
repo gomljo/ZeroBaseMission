@@ -1,15 +1,9 @@
 package com.publicWifiSearch.domain.dto.jsonRequestdtos;
 
 import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.publicWifiSearch.domain.dto.AddressDto;
 import com.publicWifiSearch.domain.dto.Dto;
-import com.publicWifiSearch.domain.dto.openAPI.jsonParser.InstallationDeserializer;
 import com.publicWifiSearch.domain.dto.openAPI.jsonParser.PublicWifiDeserializer;
 import com.publicWifiSearch.domain.model.publicWifi.PublicWifi;
-import com.publicWifiSearch.domain.model.publicWifi.address.Address;
-import com.publicWifiSearch.domain.model.publicWifi.installation.Installation;
-import com.publicWifiSearch.domain.model.publicWifi.wifi.Wifi;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,20 +1,17 @@
-package com.publicWifiSearch.domain.model.publicWifi.wifi;
+package com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.wifi;
 
-import com.google.gson.annotations.JsonAdapter;
-
-import com.publicWifiSearch.domain.dto.openAPI.jsonParser.WifiDeserializer;
+import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.PublicWifiDetail;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-@JsonAdapter(WifiDeserializer.class)
-public class Wifi {
+public class Wifi implements PublicWifiDetail {
 
     private String wifiName;
-    private double coordinateX;
     private double coordinateY;
+    private double coordinateX;
     private String connectionEnvironment;
     private String networkType;
     private String service;

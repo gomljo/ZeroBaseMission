@@ -12,6 +12,7 @@ public class URLMaker {
 
     public String getURL(){
         return UrlElement.HOMEPAGE.toString() +
+                UrlElement.PORT.toString() +
                 UrlElement.PUBLIC_KEY.toString() +
                 UrlElement.DATA_TYPE.toString() +
                 UrlElement.SERVICE_TYPE.toString() +

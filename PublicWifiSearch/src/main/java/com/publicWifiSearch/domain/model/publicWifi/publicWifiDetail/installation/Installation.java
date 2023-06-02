@@ -1,16 +1,13 @@
-package com.publicWifiSearch.domain.model.publicWifi.installation;
+package com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.installation;
 
-import com.google.gson.annotations.JsonAdapter;
-
-import com.publicWifiSearch.domain.dto.openAPI.jsonParser.InstallationDeserializer;
+import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.PublicWifiDetail;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-@JsonAdapter(InstallationDeserializer.class)
-public class Installation {
+public class Installation implements PublicWifiDetail {
 
     private String installLocation;
     private String installType;

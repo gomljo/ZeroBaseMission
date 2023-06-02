@@ -4,7 +4,7 @@ import com.google.gson.annotations.JsonAdapter;
 
 import com.publicWifiSearch.domain.dto.Dto;
 import com.publicWifiSearch.domain.dto.openAPI.jsonParser.InstallationDeserializer;
-import com.publicWifiSearch.domain.model.publicWifi.installation.Installation;
+import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.installation.Installation;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

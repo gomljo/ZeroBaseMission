@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.publicWifiSearch.domain.dto.PublicWifiDto;
+import com.publicWifiSearch.domain.dto.jsonRequestdtos.JsonRequestPublicWifiDto;
+import com.publicWifiSearch.domain.dto.jsonRequestdtos.JsonRequestPublicWifiRecordDto;
+import com.publicWifiSearch.domain.model.publicWifi.PublicWifiRecord;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,7 +24,6 @@ public class OpenAPI {
     private URL url;
     private HttpURLConnection connection;
     private String rawJson;
-    private int numberOfTotalData;
     private JsonObject json;
     private JsonObject wifiInformation;
 
@@ -30,6 +32,11 @@ public class OpenAPI {
     public OpenAPI() {
 
     }
+
+    public URL getUrl() {
+        return url;
+    }
+
     public void makeURL(URLMaker urlMaker) throws MalformedURLException {
         url = new URL(urlMaker.getURL());
     }
@@ -46,7 +53,7 @@ public class OpenAPI {
             throw new IllegalStateException();
         }
     }
-    public void requestJson() throws IOException{
+    public void convertToRawJson() throws IOException{
         StringBuilder json = new StringBuilder();
 
         InputStreamReader requestResult = new InputStreamReader(connection.getInputStream(), FORMAT);
@@ -61,7 +68,8 @@ public class OpenAPI {
         this.json = (JsonObject) JsonParser.parseString(this.rawJson);
     }
     private void parseWifiInformationFromJson(){
-        this.wifiInformation =  (JsonObject) (this.json.get(UrlElement.SERVICE_TYPE.toString()));
+        String serviceName = UrlElement.SERVICE_TYPE.toString().replace("/", "");
+        this.wifiInformation =  (JsonObject) (this.json.get(serviceName));
     }
     public int getNumberOfTotalData(URLMaker urlMaker){
         try{
@@ -69,7 +77,7 @@ public class OpenAPI {
             makeHttpConnection();
             connect();
             checkConnectionStatus();
-            requestJson();
+            convertToRawJson();
             parseRawJson();
             parseWifiInformationFromJson();
         }
@@ -79,27 +87,27 @@ public class OpenAPI {
 
         return this.wifiInformation.get(NUMBER_OF_TOTAL_DATA).getAsInt();
     }
-    public PublicWifiDto convertToJson(){
+    public JsonRequestPublicWifiRecordDto convertToJson(){
         Gson gson = new Gson();
-        JsonObject totalJson = (JsonObject) JsonParser.parseString(this.rawJson);
-        JsonObject publicWifiJson = (JsonObject) totalJson.get(UrlElement.SERVICE_TYPE.toString());
-        return gson.fromJson(publicWifiJson, PublicWifiDto.class);
+        parseRawJson();
+        parseWifiInformationFromJson();
+        return gson.fromJson(this.wifiInformation, JsonRequestPublicWifiRecordDto.class);
     }
 
-    public PublicWifiDto request(URLMaker urlMaker){
-        PublicWifiDto publicWifiDto = new PublicWifiDto();
+    public JsonRequestPublicWifiRecordDto request(URLMaker urlMaker){
+        JsonRequestPublicWifiRecordDto publicWifiRecordDto = new JsonRequestPublicWifiRecordDto();
         try{
             makeURL(urlMaker);
             makeHttpConnection();
             connect();
             checkConnectionStatus();
-            requestJson();
-            publicWifiDto = convertToJson();
+            convertToRawJson();
+            publicWifiRecordDto = convertToJson();
         }
         catch (Exception e){
             System.out.println(e.getMessage());
         }
-        return publicWifiDto;
+        return publicWifiRecordDto;
     }
 
 }
