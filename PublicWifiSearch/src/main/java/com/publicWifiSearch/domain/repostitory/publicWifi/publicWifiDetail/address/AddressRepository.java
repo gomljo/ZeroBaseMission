@@ -1,6 +1,7 @@
 package com.publicWifiSearch.domain.repostitory.publicWifi.publicWifiDetail.address;
 
 import com.publicWifiSearch.domain.repostitory.dbConnection.SqliteConnectionMaker;
+import com.publicWifiSearch.domain.repostitory.publicWifi.constant.AddressQuery;
 import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.ParameterHelper;
 import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.JdbcLauncher;
 import com.publicWifiSearch.domain.repostitory.publicWifi.Repository;
@@ -14,15 +15,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddressRepository extends SqliteConnectionMaker implements Repository<Address> {
-    private static final String TABLE_NAME = "address";
-    private static final String SAVE_QUERY = String.format("%s%s%s%s", "insert into ",TABLE_NAME," values ", "(?,?,?,?)");
-    private static final String SELECT_ALL_QUERY = String.format("%s%s", "select * from ", TABLE_NAME);
-    private static final String DELETE_ALL_QUERY = String.format("%s%s", "delete from ", TABLE_NAME);
-    private static final String SELECT_BY_MANAGEMENT_ID_QUERY = String.format("%s%s%s%s", "select managementId from ", TABLE_NAME, "where managementId = ", "(?)");
+public class AddressRepository extends Repository<Address> {
+
     private JdbcLauncher jdbcLauncher;
-    public AddressRepository(){
-    }
 
     @Override
     public void connectDataBaseWith(Connection connection) {
@@ -31,7 +26,7 @@ public class AddressRepository extends SqliteConnectionMaker implements Reposito
 
     @Override
     public void save(List<Address> addressList) throws SQLException {
-        SqlStatement sqlStatement = connection -> connection.prepareStatement(SAVE_QUERY);
+        SqlStatement sqlStatement = connection -> connection.prepareStatement(AddressQuery.SAVE_QUERY);
 
         ParameterHelper parameterHelper = (preparedStatement, index) -> {
             preparedStatement.setLong(Column.FIRST.getPosition(), index);
@@ -46,11 +41,11 @@ public class AddressRepository extends SqliteConnectionMaker implements Reposito
 
     @Override
     public void deleteAll() throws SQLException {
-        SqlStatement sqlStatement = connection -> connection.prepareStatement(DELETE_ALL_QUERY);
+        SqlStatement sqlStatement = connection -> connection.prepareStatement(AddressQuery.DELETE_ALL_QUERY);
         this.jdbcLauncher.executeUpdateWithPreparedStatement(sqlStatement);
     }
-
-    public Address toEntity(ResultSet resultSet) throws SQLException {
+    @Override
+    public Address transformToEntity(ResultSet resultSet) throws SQLException {
         return Address.builder()
                 .district(resultSet.getString(Column.SECOND.getPosition()))
                 .roadAddress(resultSet.getString(Column.THIRD.getPosition()))
@@ -59,41 +54,36 @@ public class AddressRepository extends SqliteConnectionMaker implements Reposito
     }
 
     @Override
-    public Address findByManagementId(String managementId) {
-        Address address = new Address();
-        SqlStatement sqlStatement = connection -> connection.prepareStatement(SELECT_BY_MANAGEMENT_ID_QUERY);
-        ResultSet resultSet;
-        ParameterHelper parameterHelper = (preparedStatement, index) -> preparedStatement.setObject(Column.FIRST.getPosition(), managementId);
-
-        try {
-            resultSet = jdbcLauncher.executeQueryWithPreparedStatement(sqlStatement, parameterHelper);
-            address = toEntity(resultSet);
-        }catch (SQLException sqlException){
-            System.out.println(sqlException.getMessage());
+    public List<Address> transformToEntityBundle(ResultSet resultSet) throws SQLException {
+        List<Address> addresses = new ArrayList<>();
+        if(resultSet != null){
+            while (resultSet.next()){
+                addresses.add(transformToEntity(resultSet));
+            }
         }
+        return addresses;
+    }
 
-        return address;
+    @Override
+    public Address findByManagementId(String addressId) throws SQLException{
+        ResultSet addressResultSet = jdbcLauncher.executeQueryWithPreparedStatement(
+                connection -> connection.prepareStatement(AddressQuery.SELECT_BY_MANAGEMENT_ID_QUERY),
+                (preparedStatement, index) -> preparedStatement.setObject(Column.FIRST.getPosition(), addressId));
+        return transformToEntity(addressResultSet);
     }
 
     @Override
     public List<Address> findAll() {
-        List<Address> addresses = new ArrayList<>();
-        SqlStatement sqlStatement = connection -> connection.prepareStatement(SELECT_ALL_QUERY);
-        ResultSet resultSet;
+        List<Address> addresses;
         try {
-            resultSet = jdbcLauncher.executeQueryWithPreparedStatement(sqlStatement);
-            if(resultSet != null){
-                while (resultSet.next()){
-                    addresses.add(toEntity(resultSet));
-                }
-            }
+            ResultSet resultSet = jdbcLauncher.executeQueryWithPreparedStatement(
+                    connection -> connection.prepareStatement(AddressQuery.SELECT_ALL_QUERY));
+            addresses = transformToEntityBundle(resultSet);
         }
         catch (SQLException sqlException){
             throw new RuntimeException(sqlException);
         }
         return addresses;
     }
-
-
 
 }

@@ -1,7 +1,7 @@
 package com.publicWifiSearch.domain.repostitory.publicWifi.publicWifiDetail.installation;
 
-import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.address.Address;
 import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.installation.Installation;
+import com.publicWifiSearch.domain.repostitory.publicWifi.constant.InstallationQuery;
 import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.JdbcLauncher;
 import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.ParameterHelper;
 import com.publicWifiSearch.domain.repostitory.publicWifi.Repository;
@@ -9,23 +9,14 @@ import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.SqlStatement;
 import com.publicWifiSearch.domain.repostitory.publicWifi.constant.Column;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InstallationRepository implements Repository<Installation> {
-    private static final String TABLE_NAME = "installation";
-    private static final String SAVE_QUERY = String.format("%s%s%s%s", "insert into ",TABLE_NAME," values ", "(?,?,?,?,?,?)");
-    private static final String SELECT_ALL_QUERY = String.format("%s%s", "select * from ", TABLE_NAME);
-    private static final String DELETE_ALL_QUERY = String.format("%s%s", "delete from ", TABLE_NAME);
+public class InstallationRepository extends Repository<Installation> {
+
     private JdbcLauncher jdbcLauncher;
-
-
-    public InstallationRepository(){
-
-    }
 
     @Override
     public void connectDataBaseWith(Connection connection) {
@@ -34,7 +25,7 @@ public class InstallationRepository implements Repository<Installation> {
 
     @Override
     public void save(List<Installation> installationList) throws SQLException {
-        SqlStatement sqlStatement = connection -> connection.prepareStatement(SAVE_QUERY);
+        SqlStatement sqlStatement = connection -> connection.prepareStatement(InstallationQuery.SAVE_QUERY);
 
         ParameterHelper parameterHelper = (preparedStatement, index) -> {
             preparedStatement.setLong(Column.FIRST.getPosition(), index);
@@ -47,7 +38,8 @@ public class InstallationRepository implements Repository<Installation> {
 
         this.jdbcLauncher.executeUpdateBatchWithPreparedStatement(sqlStatement, installationList, parameterHelper);
     }
-    public Installation toEntity(ResultSet resultSet) throws SQLException {
+
+    public Installation transformToEntity(ResultSet resultSet) throws SQLException {
         return Installation.builder()
                 .installLocation(resultSet.getString(Column.SECOND.getPosition()))
                 .installType(resultSet.getString(Column.THIRD.getPosition()))
@@ -56,21 +48,43 @@ public class InstallationRepository implements Repository<Installation> {
                 .installDivision(resultSet.getString(Column.SIXTH.getPosition()))
                 .build();
     }
+
     @Override
     public void deleteAll() throws SQLException {
-        SqlStatement sqlStatement = connection -> connection.prepareStatement(DELETE_ALL_QUERY);
+        SqlStatement sqlStatement = connection -> connection.prepareStatement(InstallationQuery.DELETE_ALL_QUERY);
         this.jdbcLauncher.executeUpdateWithPreparedStatement(sqlStatement);
     }
 
     @Override
-    public Installation findByManagementId(String managementId) throws SQLException {
-        return null;
+    public Installation findByManagementId(String installationId) throws SQLException {
+        ResultSet installationResultSet = jdbcLauncher.executeQueryWithPreparedStatement(
+                connection -> connection.prepareStatement(InstallationQuery.SELECT_BY_MANAGEMENT_ID_QUERY),
+                (preparedStatement, index) -> preparedStatement.setObject(Column.FIRST.getPosition(), installationId));
+        return transformToEntity(installationResultSet);
     }
 
     @Override
     public List<Installation> findAll() {
-        List<Installation> installations = new ArrayList<>();
+        List<Installation> installations;
+        ResultSet resultSet;
+        try {
+            resultSet = jdbcLauncher.executeQueryWithPreparedStatement(
+                    connection -> connection.prepareStatement(InstallationQuery.SELECT_ALL_QUERY));
+            installations = transformToEntityBundle(resultSet);
+        } catch (SQLException sqlException) {
+            throw new RuntimeException(sqlException);
+        }
+        return installations;
+    }
 
+    @Override
+    public List<Installation> transformToEntityBundle(ResultSet resultSet) throws SQLException {
+        List<Installation> installations = new ArrayList<>();
+        if (resultSet != null) {
+            while (resultSet.next()) {
+                installations.add(transformToEntity(resultSet));
+            }
+        }
         return installations;
     }
 }

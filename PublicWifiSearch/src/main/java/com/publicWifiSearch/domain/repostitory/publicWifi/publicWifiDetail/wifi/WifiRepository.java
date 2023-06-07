@@ -1,6 +1,6 @@
 package com.publicWifiSearch.domain.repostitory.publicWifi.publicWifiDetail.wifi;
 
-import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.address.Address;
+import com.publicWifiSearch.domain.repostitory.publicWifi.constant.WifiQuery;
 import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.JdbcLauncher;
 import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.ParameterHelper;
 import com.publicWifiSearch.domain.repostitory.publicWifi.Repository;
@@ -9,22 +9,14 @@ import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.SqlStatement;
 import com.publicWifiSearch.domain.repostitory.publicWifi.constant.Column;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WifiRepository implements Repository<Wifi> {
-    private static final int BATCH_SIZE = 100;
-    private static final String TABLE_NAME = "wifi";
-    private static final String SAVE_QUERY = String.format("%s%s%s%s", "insert into ",TABLE_NAME," values ", "(?,?,?,?,?,?,?,?)");
-    private static final String SELECT_ALL_QUERY = String.format("%s%s", "select * from ", TABLE_NAME);
-    private static final String DELETE_ALL_QUERY = String.format("%s%s", "delete from ", TABLE_NAME);
-    private JdbcLauncher jdbcLauncher;
-    public WifiRepository(){
+public class WifiRepository extends Repository<Wifi> {
 
-    }
+    private JdbcLauncher jdbcLauncher;
 
     @Override
     public void connectDataBaseWith(Connection connection) {
@@ -32,7 +24,7 @@ public class WifiRepository implements Repository<Wifi> {
     }
     @Override
     public void save(List<Wifi> wifiList) throws SQLException {
-        SqlStatement sqlStatement = connection -> connection.prepareStatement(SAVE_QUERY);
+        SqlStatement sqlStatement = connection -> connection.prepareStatement(WifiQuery.SAVE_QUERY);
 
         ParameterHelper parameterHelper = (preparedStatement, index) -> {
             preparedStatement.setLong(Column.FIRST.getPosition(), index);
@@ -50,15 +42,18 @@ public class WifiRepository implements Repository<Wifi> {
 
     @Override
     public void deleteAll() throws SQLException {
-        SqlStatement sqlStatement = connection -> connection.prepareStatement(DELETE_ALL_QUERY);
+        SqlStatement sqlStatement = connection -> connection.prepareStatement(WifiQuery.DELETE_ALL_QUERY);
         this.jdbcLauncher.executeUpdateWithPreparedStatement(sqlStatement);
     }
 
     @Override
-    public Wifi findByManagementId(String managementId) {
-        return null;
+    public Wifi findByManagementId(String wifiId) throws SQLException {
+        ResultSet installationResultSet = jdbcLauncher.executeQueryWithPreparedStatement(
+                connection -> connection.prepareStatement(WifiQuery.SELECT_BY_MANAGEMENT_ID_QUERY),
+                (preparedStatement, index) -> preparedStatement.setObject(Column.FIRST.getPosition(), wifiId));
+        return transformToEntity(installationResultSet);
     }
-    public Wifi toEntity(ResultSet resultSet) throws SQLException {
+    public Wifi transformToEntity(ResultSet resultSet) throws SQLException {
         return Wifi.builder()
                 .wifiName(resultSet.getString(Column.SECOND.getPosition()))
                 .coordinateX(resultSet.getDouble(Column.THIRD.getPosition()))
@@ -71,8 +66,31 @@ public class WifiRepository implements Repository<Wifi> {
     }
     @Override
     public List<Wifi> findAll() {
-        List<Wifi> wifis = new ArrayList<>();
-       
-        return wifis;
+        List<Wifi> wifiBundle;
+        ResultSet resultSet;
+        try {
+            resultSet = jdbcLauncher.executeQueryWithPreparedStatement(connection -> connection.prepareStatement(WifiQuery.SELECT_ALL_QUERY));
+            wifiBundle = transformToEntityBundle(resultSet);
+        }
+        catch (SQLException sqlException){
+            throw new RuntimeException(sqlException);
+        }
+        return wifiBundle;
+    }
+
+    @Override
+    public List<Wifi> transformToEntityBundle(ResultSet resultSet) throws SQLException {
+        List<Wifi> wifiBundle = new ArrayList<>();
+        try {
+            if(resultSet != null){
+                while (resultSet.next()){
+                    wifiBundle.add(transformToEntity(resultSet));
+                }
+            }
+        }
+        catch (SQLException sqlException){
+            throw new RuntimeException(sqlException);
+        }
+        return wifiBundle;
     }
 }
