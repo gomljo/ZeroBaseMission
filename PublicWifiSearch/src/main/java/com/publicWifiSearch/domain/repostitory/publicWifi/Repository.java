@@ -1,13 +1,15 @@
 package com.publicWifiSearch.domain.repostitory.publicWifi;
 
-import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.PublicWifiDetail;
-
-
+import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.List;
 
 public interface Repository <T>{
-    int save(HashMap<String, PublicWifiDetail> publicWifiDetailHashMap) throws SQLException;
-    void deleteAll();
+    void connectDataBaseWith(Connection connection);
+    void save(List<T> detailTypeList) throws SQLException;
+    void deleteAll() throws SQLException;
     T findByManagementId(String managementId) throws SQLException;
+
+    List<T> findAll() throws SQLException;
+
 }
