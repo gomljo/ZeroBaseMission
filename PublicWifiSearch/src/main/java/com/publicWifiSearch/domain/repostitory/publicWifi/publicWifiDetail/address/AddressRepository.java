@@ -1,16 +1,14 @@
-package com.publicWifiSearch.domain.repostitory.publicWifi.address;
+package com.publicWifiSearch.domain.repostitory.publicWifi.publicWifiDetail.address;
 
-import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.PublicWifiDetail;
 import com.publicWifiSearch.domain.repostitory.dbConnection.SqliteConnectionMaker;
-import com.publicWifiSearch.domain.repostitory.publicWifi.ParameterHelper;
-import com.publicWifiSearch.domain.repostitory.publicWifi.JdbcLauncher;
+import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.ParameterHelper;
+import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.JdbcLauncher;
 import com.publicWifiSearch.domain.repostitory.publicWifi.Repository;
 import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.address.Address;
-import com.publicWifiSearch.domain.repostitory.publicWifi.SqlStatement;
+import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.SqlStatement;
 import com.publicWifiSearch.domain.repostitory.publicWifi.constant.Column;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,15 +20,13 @@ public class AddressRepository extends SqliteConnectionMaker implements Reposito
     private static final String SELECT_ALL_QUERY = String.format("%s%s", "select * from ", TABLE_NAME);
     private static final String DELETE_ALL_QUERY = String.format("%s%s", "delete from ", TABLE_NAME);
     private static final String SELECT_BY_MANAGEMENT_ID_QUERY = String.format("%s%s%s%s", "select managementId from ", TABLE_NAME, "where managementId = ", "(?)");
-    private Connection connection;
     private JdbcLauncher jdbcLauncher;
     public AddressRepository(){
     }
 
     @Override
     public void connectDataBaseWith(Connection connection) {
-        this.connection = connection;
-        jdbcLauncher = new JdbcLauncher(this.connection, Address.class.getName());
+        jdbcLauncher = new JdbcLauncher(connection);
     }
 
     @Override
@@ -38,7 +34,7 @@ public class AddressRepository extends SqliteConnectionMaker implements Reposito
         SqlStatement sqlStatement = connection -> connection.prepareStatement(SAVE_QUERY);
 
         ParameterHelper parameterHelper = (preparedStatement, index) -> {
-            preparedStatement.setObject(Column.FIRST.getPosition(), index);
+            preparedStatement.setLong(Column.FIRST.getPosition(), index);
             preparedStatement.setObject(Column.SECOND.getPosition(), addressList.get(index).getDistrict());
             preparedStatement.setObject(Column.THIRD.getPosition(), addressList.get(index).getRoadAddress());
             preparedStatement.setObject(Column.FOURTH.getPosition(), addressList.get(index).getDetailAddress());
@@ -71,7 +67,6 @@ public class AddressRepository extends SqliteConnectionMaker implements Reposito
 
         try {
             resultSet = jdbcLauncher.executeQueryWithPreparedStatement(sqlStatement, parameterHelper);
-            connection.close();
             address = toEntity(resultSet);
         }catch (SQLException sqlException){
             System.out.println(sqlException.getMessage());
