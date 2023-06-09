@@ -1,10 +1,10 @@
 package com.publicWifiSearch.domain.dto.jsonRequestdtos;
 
+import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.address.Address;
 import com.google.gson.annotations.JsonAdapter;
 
 import com.publicWifiSearch.domain.dto.Dto;
 import com.publicWifiSearch.domain.dto.openAPI.jsonParser.AddressDeserializer;
-import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.address.Address;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
