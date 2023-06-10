@@ -1,4 +1,4 @@
-package com.publicWifiSearch.domain.dto.jsonRequestdtos;
+package com.publicWifiSearch.domain.dto.openAPIRequestdtos;
 
 import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.wifi.Wifi;
 import com.publicWifiSearch.domain.dto.Dto;

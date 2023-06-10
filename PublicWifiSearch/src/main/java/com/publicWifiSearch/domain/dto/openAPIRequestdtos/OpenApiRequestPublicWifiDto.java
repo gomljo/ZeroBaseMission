@@ -1,4 +1,4 @@
-package com.publicWifiSearch.domain.dto.jsonRequestdtos;
+package com.publicWifiSearch.domain.dto.openAPIRequestdtos;
 
 import com.publicWifiSearch.domain.model.publicWifi.PublicWifi;
 import com.google.gson.annotations.JsonAdapter;
