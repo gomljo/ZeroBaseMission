@@ -9,24 +9,28 @@
 
 <html>
 <head>
+    <link href="../css/home/navigator.css?after" rel="stylesheet" >
+    <link href="../css/home/locator.css?after" rel="stylesheet" >
     <title></title>
 </head>
 <body>
 
 <div id="navigator">
-    <button type="button" id="homeButton" onclick="location.href=`index.jsp`"><%="홈" %></button>
+    <button type="button" id="homeButton"><%="홈" %></button>
+
     <button type="button"
             id="history-button"
             onclick=""
     >
       <%="위치 히스토리" %>
     </button>
+
     <button type="button"
             id="bookMark-button"
-<%--            onclick="location.href=`History.jsp`"--%>
             >
       <%="북마크" %>
     </button>
+
     <button
             type="button"
             id="requestPublicWifiButton"
@@ -38,7 +42,7 @@
 
 </div>
 
-
-<script type="text/javascript" src="../js/SearchHistory.js"></script>
 </body>
+<script type="text/javascript" src="../js/searchHistory/SearchHistoryRequest.js"></script>
+<script type="text/javascript" src="../js/returnToHome.js"></script>
 </html>

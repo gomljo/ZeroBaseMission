@@ -3,18 +3,18 @@
 <%!
     private static final String coordinateX = "coordinateX";
     private static final String coordinateY = "coordinateY";
-    private double currentX;
-    private double currentY;
+    private String currentX;
+    private String currentY;
     private String nearestPublicWifi;
     private String nearestPublicWifiFeature;
     public void mappingRequestParameter(HttpServletRequest request){
         if(request.getParameter(coordinateX)!=null && request.getParameter(coordinateY)!=null){
-            currentX = Double.parseDouble(request.getParameter(coordinateX));
-            currentY = Double.parseDouble(request.getParameter(coordinateY));
+            currentX = request.getParameter(coordinateX);
+            currentY = request.getParameter(coordinateY);
         }
-        else {
-            currentX = 0.0;
-            currentY = 0.0;
+        if (currentX==null && currentY==null) {
+            currentX = "0.0";
+            currentY = "0.0";
         }
     }
 
@@ -31,31 +31,8 @@
 <body>
 <h1><%= "내 주변 와이파이 탐색" %></h1>
 <br/>
+<jsp:include page="Header.jsp"></jsp:include>
 
-<div id="navigator">
-    <button type="button" id="homeButton" onclick="location.href=`index.jsp`"><%="홈" %></button>
-    <button type="button"
-            id="history-button"
-            onclick="location.href=`History.jsp`"
-    >
-        <%="위치 히스토리" %>
-    </button>
-    <button type="button"
-            id="bookMark-button"
-
-    >
-        <%="북마크" %>
-    </button>
-    <button
-            type="button"
-            id="requestPublicWifiButton"
-            onclick=
-                    "window.open('JsonRequest', `공공 와이파이 데이터 가져오기 결과`,
-                    'width=400,height=150,location=no,status=no,scrollbars=yes')">
-        <%="공공 와이파이 정보 갱신" %>
-    </button>
-
-</div>
 <%
     mappingRequestParameter(request);
     if (request.getAttribute("NearestTwentyPublicWifiFeatures")!= null && nearestPublicWifiFeature==null){
@@ -63,27 +40,11 @@
     }
     if(request.getAttribute("NearestTwentyPublicWifi")!=null){
         nearestPublicWifi = request.getAttribute("NearestTwentyPublicWifi").toString();
+
         System.out.println(nearestPublicWifi);
     }
 %>
 
-<%--<h1><%= "내 주변 와이파이 탐색" %></h1>--%>
-<%--<br/>--%>
-
-<%--<div id="navigator">--%>
-<%--    <button type="button" id="homeButton" onclick="`/`"><%="홈" %></button>--%>
-<%--    <button type="button" id="history-button"><%="위치 히스토리" %></button>--%>
-<%--    <button type="button" id="bookMark-button"><%="북마크" %></button>--%>
-<%--    <button--%>
-<%--            type="button"--%>
-<%--            id="requestPublicWifiButton"--%>
-<%--            onclick=--%>
-<%--                    "window.open('JsonRequest', `공공 와이파이 데이터 가져오기 결과`,--%>
-<%--                    'width=400,height=150,location=no,status=no,scrollbars=yes')">--%>
-<%--        <%="공공 와이파이 정보 갱신" %>--%>
-<%--    </button>--%>
-
-<%--</div>--%>
 
 <div id="coordinateViewer">
     <form id="coordinateForm">
@@ -107,21 +68,20 @@
         <button type="button"  id="findMyCoordinateButton">
             <%="내 위치 찾기"%>
         </button>
-        <button type="button" id="findNearByWifi">
+
+        <button type="button" id="findNearByWifiButton">
             <%="근처 와이파이 찾기"%>
         </button>
     </form>
 </div>
 
 <div id="nearestPublicWifiTable"></div>
-<script type="text/javascript" src="../js/findMyCoordinate.js"></script>
-<script type="text/javascript" src="../js/findNearestPublicWifi.js"></script>
-<script type="text/javascript" src="../js/NearestWifiTableMaker.js"></script>
-<script>
-
-    renderTable(<%= nearestPublicWifi %>, <%= nearestPublicWifiFeature%>)
-
-</script>
 </body>
-
+<script type="text/javascript" src="../js/publicWifi/findMyCoordinate.js"></script>
+<script type="text/javascript" src="../js/publicWifi/findNearestPublicWifi.js"></script>
+<script type="text/javascript" src="../js/tableMaker.js"></script>
+<script type="text/javascript" src="../js/publicWifi/ShowPublicWifiDetail.js"></script>
+<script>
+    renderPublicWifiTable(<%= nearestPublicWifi %>, <%= nearestPublicWifiFeature%>, "nearestPublicWifiTable");
+</script>
 </html>
