@@ -1,10 +1,10 @@
 package com.publicWifiSearch.controller.servlet;
 
-import com.publicWifiSearch.domain.dto.jsonRequestdtos.JsonRequestPublicWifiRecordDto;
+import com.publicWifiSearch.domain.dto.openAPIRequestdtos.OpenApiRequestPublicWifiRecordDto;
 import com.publicWifiSearch.domain.repostitory.dbConnection.DbConnectionMaker;
 import com.publicWifiSearch.domain.repostitory.dbConnection.SqliteConnectionMaker;
-import com.publicWifiSearch.domain.repostitory.publicWifi.PublicWifiRepository;
 import com.publicWifiSearch.service.OpenAPIService;
+import com.publicWifiSearch.service.PublicWifiService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,19 +21,16 @@ public class JsonRequestServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         OpenAPIService openAPIService = new OpenAPIService();
-        List<JsonRequestPublicWifiRecordDto> publicWifiDto = openAPIService.requestToOpenAPI();
+        List<OpenApiRequestPublicWifiRecordDto> openApiRequestDto = openAPIService.requestToOpenAPI();
 
         DbConnectionMaker dbConnectionMaker = new SqliteConnectionMaker();
 
-        PublicWifiRepository publicWifiRepository = new PublicWifiRepository(dbConnectionMaker);
-        publicWifiRepository.save(publicWifiDto);
-
-        request.setAttribute("numberOfTotalData", publicWifiRepository.getNumberOfData());
+        PublicWifiService publicWifiService = new PublicWifiService(dbConnectionMaker);
+        publicWifiService.saveOpenApiRequest(openApiRequestDto);
+        request.setAttribute("numberOfTotalData", publicWifiService.getNumberOfData());
 
         String viewPath = "/WEB-INF/OpenApiRequest.jsp";
         RequestDispatcher dispatcher = request.getRequestDispatcher(viewPath);
         dispatcher.forward(request, response);
-
-
     }
 }
