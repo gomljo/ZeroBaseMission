@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @RequiredArgsConstructor
 public class Address implements PublicWifiDetail {
@@ -27,5 +29,10 @@ public class Address implements PublicWifiDetail {
                 ", roadAddress='" + roadAddress + '\'' +
                 ", detailAddress='" + detailAddress + '\'' +
                 '}';
+    }
+
+    @Override
+    public List<String> toStringAllProperty() {
+        return List.of(this.district, this.roadAddress, this.detailAddress);
     }
 }

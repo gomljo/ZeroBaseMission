@@ -1,12 +1,12 @@
 package com.publicWifiSearch.domain.repostitory.publicWifi.publicWifiDetail.wifi;
 
-import com.publicWifiSearch.domain.repostitory.publicWifi.constant.WifiQuery;
-import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.JdbcLauncher;
-import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.ParameterHelper;
-import com.publicWifiSearch.domain.repostitory.publicWifi.Repository;
+import com.publicWifiSearch.domain.repostitory.publicWifi.queryConstant.WifiQuery;
+import com.publicWifiSearch.domain.repostitory.common.jdbcUtil.JdbcLauncher;
+import com.publicWifiSearch.domain.repostitory.common.jdbcUtil.ParameterBatchHelper;
+import com.publicWifiSearch.domain.repostitory.common.Repository;
 import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.wifi.Wifi;
-import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.SqlStatement;
-import com.publicWifiSearch.domain.repostitory.publicWifi.constant.Column;
+import com.publicWifiSearch.domain.repostitory.common.jdbcUtil.SqlStatement;
+import com.publicWifiSearch.domain.repostitory.common.columnConstant.Column;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -23,10 +23,10 @@ public class WifiRepository extends Repository<Wifi> {
         jdbcLauncher = new JdbcLauncher(connection);
     }
     @Override
-    public void save(List<Wifi> wifiList) throws SQLException {
+    public void saveByBatch(List<Wifi> wifiList) throws SQLException {
         SqlStatement sqlStatement = connection -> connection.prepareStatement(WifiQuery.SAVE_QUERY);
 
-        ParameterHelper parameterHelper = (preparedStatement, index) -> {
+        ParameterBatchHelper parameterBatchHelper = (preparedStatement, index) -> {
             preparedStatement.setLong(Column.FIRST.getPosition(), index);
             preparedStatement.setObject(Column.SECOND.getPosition(), wifiList.get(index).getWifiName());
             preparedStatement.setObject(Column.THIRD.getPosition(), wifiList.get(index).getCoordinateX());
@@ -37,17 +37,17 @@ public class WifiRepository extends Repository<Wifi> {
             preparedStatement.setObject(Column.EIGHTH.getPosition(), wifiList.get(index).getDateOfWork());
         };
 
-        this.jdbcLauncher.executeUpdateBatchWithPreparedStatement(sqlStatement, wifiList, parameterHelper);
+        this.jdbcLauncher.executeSaveByBatchWithPreparedStatement(sqlStatement, wifiList, parameterBatchHelper);
     }
 
     @Override
     public void deleteAll() throws SQLException {
         SqlStatement sqlStatement = connection -> connection.prepareStatement(WifiQuery.DELETE_ALL_QUERY);
-        this.jdbcLauncher.executeUpdateWithPreparedStatement(sqlStatement);
+        this.jdbcLauncher.executeUpdateWithPreparedStatement(sqlStatement, null);
     }
 
     @Override
-    public Wifi findByManagementId(String wifiId) throws SQLException {
+    public Wifi findById(String wifiId) throws SQLException {
         ResultSet installationResultSet = jdbcLauncher.executeQueryWithPreparedStatement(
                 connection -> connection.prepareStatement(WifiQuery.SELECT_BY_MANAGEMENT_ID_QUERY),
                 (preparedStatement, index) -> preparedStatement.setObject(Column.FIRST.getPosition(), wifiId));

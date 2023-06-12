@@ -1,16 +1,16 @@
 package com.publicWifiSearch.domain.dto.openAPI.jsonParser;
 
+import com.publicWifiSearch.domain.dto.openAPIRequestdtos.OpenApiRequestInstallationDto;
 import com.google.gson.*;
-import com.publicWifiSearch.domain.dto.jsonRequestdtos.JsonRequestInstallationDto;
 
 import java.lang.reflect.Type;
 
-public class InstallationDeserializer implements JsonDeserializer<JsonRequestInstallationDto> {
+public class InstallationDeserializer implements JsonDeserializer<OpenApiRequestInstallationDto> {
     @Override
-    public JsonRequestInstallationDto deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public OpenApiRequestInstallationDto deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject openApiData = (JsonObject) json.getAsJsonObject();
 
-        return JsonRequestInstallationDto.builder()
+        return OpenApiRequestInstallationDto.builder()
                 .installLocation(openApiData.get("X_SWIFI_INSTL_FLOOR").isJsonNull() ? "null": openApiData.get("X_SWIFI_INSTL_FLOOR").getAsString())
                 .installType(openApiData.get("X_SWIFI_INSTL_TY").getAsString())
                 .installOffice(openApiData.get("X_SWIFI_INSTL_MBY").getAsString())

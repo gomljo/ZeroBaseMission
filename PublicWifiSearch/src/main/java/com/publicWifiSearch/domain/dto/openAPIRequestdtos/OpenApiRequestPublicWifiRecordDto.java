@@ -15,19 +15,19 @@ import java.util.stream.Collectors;
 
 @Getter
 @RequiredArgsConstructor
-public class JsonRequestPublicWifiRecordDto implements Dto<PublicWifiRecord> {
+public class OpenApiRequestPublicWifiRecordDto implements Dto<PublicWifiRecord> {
 
     @SerializedName("row")
     @Expose
-    List<JsonRequestPublicWifiDto> publicWifiDto = new ArrayList<>();
+    List<OpenApiRequestPublicWifiDto> publicWifiDto = new ArrayList<>();
     @Builder
-    public JsonRequestPublicWifiRecordDto(List<JsonRequestPublicWifiDto> publicWifiDto) {
+    public OpenApiRequestPublicWifiRecordDto(List<OpenApiRequestPublicWifiDto> publicWifiDto) {
         this.publicWifiDto = publicWifiDto;
     }
 
     @Override
     public PublicWifiRecord toEntity() {
-        return new PublicWifiRecord(publicWifiDto.stream().map(JsonRequestPublicWifiDto::toEntity).collect(Collectors.toList()));
+        return new PublicWifiRecord(publicWifiDto.stream().map(OpenApiRequestPublicWifiDto::toEntity).collect(Collectors.toList()));
     }
 
     @Override

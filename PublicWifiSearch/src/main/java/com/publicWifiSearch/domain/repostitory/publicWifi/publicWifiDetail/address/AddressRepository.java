@@ -1,13 +1,12 @@
 package com.publicWifiSearch.domain.repostitory.publicWifi.publicWifiDetail.address;
 
-import com.publicWifiSearch.domain.repostitory.dbConnection.SqliteConnectionMaker;
-import com.publicWifiSearch.domain.repostitory.publicWifi.constant.AddressQuery;
-import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.ParameterHelper;
-import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.JdbcLauncher;
-import com.publicWifiSearch.domain.repostitory.publicWifi.Repository;
+import com.publicWifiSearch.domain.repostitory.publicWifi.queryConstant.AddressQuery;
+import com.publicWifiSearch.domain.repostitory.common.jdbcUtil.ParameterBatchHelper;
+import com.publicWifiSearch.domain.repostitory.common.jdbcUtil.JdbcLauncher;
+import com.publicWifiSearch.domain.repostitory.common.Repository;
 import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.address.Address;
-import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.SqlStatement;
-import com.publicWifiSearch.domain.repostitory.publicWifi.constant.Column;
+import com.publicWifiSearch.domain.repostitory.common.jdbcUtil.SqlStatement;
+import com.publicWifiSearch.domain.repostitory.common.columnConstant.Column;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -25,24 +24,23 @@ public class AddressRepository extends Repository<Address> {
     }
 
     @Override
-    public void save(List<Address> addressList) throws SQLException {
+    public void saveByBatch(List<Address> addressList) throws SQLException {
         SqlStatement sqlStatement = connection -> connection.prepareStatement(AddressQuery.SAVE_QUERY);
 
-        ParameterHelper parameterHelper = (preparedStatement, index) -> {
+        ParameterBatchHelper parameterBatchHelper = (preparedStatement, index) -> {
             preparedStatement.setLong(Column.FIRST.getPosition(), index);
             preparedStatement.setObject(Column.SECOND.getPosition(), addressList.get(index).getDistrict());
             preparedStatement.setObject(Column.THIRD.getPosition(), addressList.get(index).getRoadAddress());
             preparedStatement.setObject(Column.FOURTH.getPosition(), addressList.get(index).getDetailAddress());
         };
 
-        this.jdbcLauncher.executeUpdateBatchWithPreparedStatement(sqlStatement, addressList, parameterHelper);
+        this.jdbcLauncher.executeSaveByBatchWithPreparedStatement(sqlStatement, addressList, parameterBatchHelper);
     }
-
 
     @Override
     public void deleteAll() throws SQLException {
         SqlStatement sqlStatement = connection -> connection.prepareStatement(AddressQuery.DELETE_ALL_QUERY);
-        this.jdbcLauncher.executeUpdateWithPreparedStatement(sqlStatement);
+        this.jdbcLauncher.executeUpdateWithPreparedStatement(sqlStatement, null);
     }
     @Override
     public Address transformToEntity(ResultSet resultSet) throws SQLException {
@@ -65,7 +63,7 @@ public class AddressRepository extends Repository<Address> {
     }
 
     @Override
-    public Address findByManagementId(String addressId) throws SQLException{
+    public Address findById(String addressId) throws SQLException{
         ResultSet addressResultSet = jdbcLauncher.executeQueryWithPreparedStatement(
                 connection -> connection.prepareStatement(AddressQuery.SELECT_BY_MANAGEMENT_ID_QUERY),
                 (preparedStatement, index) -> preparedStatement.setObject(Column.FIRST.getPosition(), addressId));

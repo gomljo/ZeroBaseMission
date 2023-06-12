@@ -1,8 +1,8 @@
-package com.publicWifiSearch.controller.servlet;
+package com.publicWifiSearch.controller.servlet.publicWifi;
 
 import com.publicWifiSearch.domain.dto.openAPIRequestdtos.OpenApiRequestPublicWifiRecordDto;
-import com.publicWifiSearch.domain.repostitory.dbConnection.DbConnectionMaker;
-import com.publicWifiSearch.domain.repostitory.dbConnection.SqliteConnectionMaker;
+import com.publicWifiSearch.domain.repostitory.common.dbConnection.DbConnectionMaker;
+import com.publicWifiSearch.domain.repostitory.common.dbConnection.SqliteConnectionMaker;
 import com.publicWifiSearch.service.OpenAPIService;
 import com.publicWifiSearch.service.PublicWifiService;
 

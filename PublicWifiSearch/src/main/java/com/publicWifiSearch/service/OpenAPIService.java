@@ -1,10 +1,8 @@
 package com.publicWifiSearch.service;
 
-import com.publicWifiSearch.domain.dto.jsonRequestdtos.JsonRequestPublicWifiRecordDto;
+import com.publicWifiSearch.domain.dto.openAPIRequestdtos.OpenApiRequestPublicWifiRecordDto;
 import com.publicWifiSearch.domain.dto.openAPI.URLMaker;
 import com.publicWifiSearch.domain.dto.openAPI.OpenAPI;
-import com.publicWifiSearch.domain.model.publicWifi.PublicWifi;
-import com.publicWifiSearch.domain.model.publicWifi.PublicWifiRecord;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -23,13 +21,13 @@ public class OpenAPIService {
         return openAPI.getNumberOfTotalData(urlMaker);
     }
 
-    public JsonRequestPublicWifiRecordDto getPublicWifiData(int start, int end){
+    public OpenApiRequestPublicWifiRecordDto getPublicWifiData(int start, int end){
         URLMaker urlMaker = new URLMaker(start, end);
         OpenAPI openAPI = new OpenAPI();
         return openAPI.request(urlMaker);
     }
 
-    public List<JsonRequestPublicWifiRecordDto> requestToOpenAPI(){
+    public List<OpenApiRequestPublicWifiRecordDto> requestToOpenAPI(){
         int numberOfTotalData = getNumberOfTotalData();
 
         int numberOfRequest = numberOfTotalData / TRANSMISSION_UNIT;
@@ -37,17 +35,17 @@ public class OpenAPIService {
             numberOfRequest = numberOfTotalData / TRANSMISSION_UNIT + 1;
         }
 
-        List<JsonRequestPublicWifiRecordDto> jsonRequestPublicWifiRecordDtoList = new ArrayList<>();
+        List<OpenApiRequestPublicWifiRecordDto> openApiRequestPublicWifiRecordDtoList = new ArrayList<>();
         try{
             for (int i = 0; i < numberOfRequest; i++) {
-                JsonRequestPublicWifiRecordDto jsonRequestPublicWifiRecordDto = getPublicWifiData(1+TRANSMISSION_UNIT*i, TRANSMISSION_UNIT*(i+1));
-                jsonRequestPublicWifiRecordDtoList.add(jsonRequestPublicWifiRecordDto);
+                OpenApiRequestPublicWifiRecordDto openApiRequestPublicWifiRecordDto = getPublicWifiData(1+TRANSMISSION_UNIT*i, TRANSMISSION_UNIT*(i+1));
+                openApiRequestPublicWifiRecordDtoList.add(openApiRequestPublicWifiRecordDto);
             }
         }
         catch (Exception e){
             System.out.println(e.getMessage());
         }
-        return jsonRequestPublicWifiRecordDtoList;
+        return openApiRequestPublicWifiRecordDtoList;
     }
 
 

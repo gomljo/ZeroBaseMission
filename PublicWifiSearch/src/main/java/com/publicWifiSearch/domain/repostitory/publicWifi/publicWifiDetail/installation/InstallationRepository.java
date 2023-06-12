@@ -1,12 +1,12 @@
 package com.publicWifiSearch.domain.repostitory.publicWifi.publicWifiDetail.installation;
 
 import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.installation.Installation;
-import com.publicWifiSearch.domain.repostitory.publicWifi.constant.InstallationQuery;
-import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.JdbcLauncher;
-import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.ParameterHelper;
-import com.publicWifiSearch.domain.repostitory.publicWifi.Repository;
-import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.SqlStatement;
-import com.publicWifiSearch.domain.repostitory.publicWifi.constant.Column;
+import com.publicWifiSearch.domain.repostitory.publicWifi.queryConstant.InstallationQuery;
+import com.publicWifiSearch.domain.repostitory.common.jdbcUtil.JdbcLauncher;
+import com.publicWifiSearch.domain.repostitory.common.jdbcUtil.ParameterBatchHelper;
+import com.publicWifiSearch.domain.repostitory.common.Repository;
+import com.publicWifiSearch.domain.repostitory.common.jdbcUtil.SqlStatement;
+import com.publicWifiSearch.domain.repostitory.common.columnConstant.Column;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -24,10 +24,10 @@ public class InstallationRepository extends Repository<Installation> {
     }
 
     @Override
-    public void save(List<Installation> installationList) throws SQLException {
+    public void saveByBatch(List<Installation> installationList) throws SQLException {
         SqlStatement sqlStatement = connection -> connection.prepareStatement(InstallationQuery.SAVE_QUERY);
 
-        ParameterHelper parameterHelper = (preparedStatement, index) -> {
+        ParameterBatchHelper parameterBatchHelper = (preparedStatement, index) -> {
             preparedStatement.setLong(Column.FIRST.getPosition(), index);
             preparedStatement.setObject(Column.SECOND.getPosition(), installationList.get(index).getInstallLocation());
             preparedStatement.setObject(Column.THIRD.getPosition(), installationList.get(index).getInstallType());
@@ -36,7 +36,7 @@ public class InstallationRepository extends Repository<Installation> {
             preparedStatement.setObject(Column.SIXTH.getPosition(), installationList.get(index).getInstallDivision());
         };
 
-        this.jdbcLauncher.executeUpdateBatchWithPreparedStatement(sqlStatement, installationList, parameterHelper);
+        this.jdbcLauncher.executeSaveByBatchWithPreparedStatement(sqlStatement, installationList, parameterBatchHelper);
     }
 
     public Installation transformToEntity(ResultSet resultSet) throws SQLException {
@@ -52,11 +52,11 @@ public class InstallationRepository extends Repository<Installation> {
     @Override
     public void deleteAll() throws SQLException {
         SqlStatement sqlStatement = connection -> connection.prepareStatement(InstallationQuery.DELETE_ALL_QUERY);
-        this.jdbcLauncher.executeUpdateWithPreparedStatement(sqlStatement);
+        this.jdbcLauncher.executeUpdateWithPreparedStatement(sqlStatement, null);
     }
 
     @Override
-    public Installation findByManagementId(String installationId) throws SQLException {
+    public Installation findById(String installationId) throws SQLException {
         ResultSet installationResultSet = jdbcLauncher.executeQueryWithPreparedStatement(
                 connection -> connection.prepareStatement(InstallationQuery.SELECT_BY_MANAGEMENT_ID_QUERY),
                 (preparedStatement, index) -> preparedStatement.setObject(Column.FIRST.getPosition(), installationId));

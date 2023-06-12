@@ -77,10 +77,10 @@
 
 <div id="nearestPublicWifiTable"></div>
 </body>
-<script type="text/javascript" src="../js/publicWifi/findMyCoordinate.js"></script>
+<script type="text/javascript" src="../js/searchHistory/findMyCoordinate.js"></script>
 <script type="text/javascript" src="../js/publicWifi/findNearestPublicWifi.js"></script>
-<script type="text/javascript" src="../js/tableMaker.js"></script>
 <script type="text/javascript" src="../js/publicWifi/ShowPublicWifiDetail.js"></script>
+<script type="text/javascript" src="../js/tableMaker.js"></script>
 <script>
     renderPublicWifiTable(<%= nearestPublicWifi %>, <%= nearestPublicWifiFeature%>, "nearestPublicWifiTable");
 </script>

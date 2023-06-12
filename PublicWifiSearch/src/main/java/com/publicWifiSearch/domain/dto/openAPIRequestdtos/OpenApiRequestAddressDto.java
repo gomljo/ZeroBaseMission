@@ -12,14 +12,14 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 @JsonAdapter(AddressDeserializer.class)
-public class JsonRequestAddressDto implements Dto<Address> {
+public class OpenApiRequestAddressDto implements Dto<Address> {
 
     private String district;
     private String roadAddress;
     private String detailAddress;
 
     @Builder
-    public JsonRequestAddressDto(String district, String roadAddress, String detailAddress) {
+    public OpenApiRequestAddressDto(String district, String roadAddress, String detailAddress) {
         this.district = district;
         this.roadAddress = roadAddress;
         this.detailAddress = detailAddress;

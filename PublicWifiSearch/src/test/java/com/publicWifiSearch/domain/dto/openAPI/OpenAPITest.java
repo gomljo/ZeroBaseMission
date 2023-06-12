@@ -1,8 +1,5 @@
 package com.publicWifiSearch.domain.dto.openAPI;
 
-import com.publicWifiSearch.domain.dto.jsonRequestdtos.JsonRequestPublicWifiRecordDto;
-import com.publicWifiSearch.domain.dto.openAPI.OpenAPI;
-import com.publicWifiSearch.domain.dto.openAPI.URLMaker;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -22,7 +19,7 @@ class OpenAPITest {
         String path = "http://openapi.seoul.go.kr:8088/616e584d52676f6d35365545766f53/json/TbPublicWifiInfo/1/1/";
         URL url = new URL(path);
         OpenAPI openAPI = new OpenAPI();
-        URLMaker urlMaker = new URLMaker(1,1);
+        URLMaker urlMaker = new URLMaker(start,end);
         // when
         openAPI.makeURL(urlMaker);
 

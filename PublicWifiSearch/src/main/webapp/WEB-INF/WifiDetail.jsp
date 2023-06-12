@@ -9,14 +9,19 @@
 <%!
     private static final String PUBLIC_WIFI_DETAIL_FEATURE = "publicWifiDetailFeature";
     private static final String PUBLIC_WIFI_DETAIL = "publicWifiDetail";
+    private static final String BOOKMARK_GROUP_NAME_BUNDLE = "bookmarkGroupNameJson";
     private String publicWifiDetailFeature;
     private String publicWifiDetail;
+    private String bookmarkGroupNameBundle;
 
     public void mappingRequestParameter(HttpServletRequest request){
-        System.out.println(request.getParameter(PUBLIC_WIFI_DETAIL_FEATURE));
         if(request.getAttribute(PUBLIC_WIFI_DETAIL_FEATURE)!=null && request.getAttribute(PUBLIC_WIFI_DETAIL)!=null){
             publicWifiDetailFeature = request.getAttribute(PUBLIC_WIFI_DETAIL_FEATURE).toString();
             publicWifiDetail = request.getAttribute(PUBLIC_WIFI_DETAIL).toString();
+        }
+        if(request.getAttribute(BOOKMARK_GROUP_NAME_BUNDLE)!=null){
+            bookmarkGroupNameBundle = request.getAttribute(BOOKMARK_GROUP_NAME_BUNDLE).toString();
+            System.out.println(bookmarkGroupNameBundle);
         }
     }
 %>
@@ -29,15 +34,15 @@
 <h1><%= "와이파이 정보 구하기" %></h1>
 <br/>
 <jsp:include page="Header.jsp"></jsp:include>
-<form>
+<form id="bookmark-form">
 
     <label for="bookmark-selector">
-        <select id="bookmark-selector">
-            <option value="bookmark-group-name">북마크 그룹 이름 선택</option>
+        <select id="bookmark-selector" >
+            <option value="bookmark-group-name" selected disabled>북마크 그룹 이름 선택</option>
         </select>
     </label>
 
-    <button id="add-bookmark-button" type="submit">즐겨찾기 추가하기</button>
+    <button id="add-bookmark-button" type="button">즐겨찾기 추가하기</button>
 
 </form>
 
@@ -47,10 +52,12 @@
 <div id="publicWifiDetail"></div>
 
 </body>
-<script src="../js/tableMaker.js"></script>
+<script type="text/javascript" src="../js/tableMaker.js"></script>
+<script type="text/javascript" src="../js/bookmark/BookmarkSaveRequest.js"></script>
+<script type="text/javascript" src="../js/bookmarkGroup/BookmarkGroupNameSelector.js"></script>
 <script>
-    <%--validateFeature(<%=publicWifiDetailFeature%>);--%>
-    <%--validateJson(<%=publicWifiDetail%>);--%>
+    renderBookmarkGroupSelector(<%=bookmarkGroupNameBundle%>);
     renderPublicWifiDetailTable(<%=publicWifiDetail%>, <%=publicWifiDetailFeature%>, "publicWifiDetail");
+
 </script>
 </html>

@@ -11,16 +11,16 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 @JsonAdapter(PublicWifiDeserializer.class)
-public class JsonRequestPublicWifiDto implements Dto<PublicWifi> {
+public class OpenApiRequestPublicWifiDto implements Dto<PublicWifi> {
     private String managementId;
 
-    private JsonRequestAddressDto addressDto;
+    private OpenApiRequestAddressDto addressDto;
 
-    private JsonRequestInstallationDto installationDto;
+    private OpenApiRequestInstallationDto installationDto;
 
-    private JsonRequestWifiDto wifiDto;
+    private OpenApiRequestWifiDto wifiDto;
     @Builder
-    public JsonRequestPublicWifiDto(String managementId, JsonRequestAddressDto address, JsonRequestInstallationDto installation, JsonRequestWifiDto wifi) {
+    public OpenApiRequestPublicWifiDto(String managementId, OpenApiRequestAddressDto address, OpenApiRequestInstallationDto installation, OpenApiRequestWifiDto wifi) {
         this.addressDto = address;
         this.installationDto = installation;
         this.wifiDto = wifi;

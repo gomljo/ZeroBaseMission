@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 @JsonAdapter(InstallationDeserializer.class)
-public class JsonRequestInstallationDto implements Dto<Installation> {
+public class OpenApiRequestInstallationDto implements Dto<Installation> {
 
     private String installLocation;
     private String installType;
@@ -21,7 +21,7 @@ public class JsonRequestInstallationDto implements Dto<Installation> {
     private String installDivision;
 
     @Builder
-    public JsonRequestInstallationDto(String installLocation, String installType, String installOffice, String installYear, String installDivision) {
+    public OpenApiRequestInstallationDto(String installLocation, String installType, String installOffice, String installYear, String installDivision) {
         this.installLocation = installLocation;
         this.installType = installType;
         this.installOffice = installOffice;

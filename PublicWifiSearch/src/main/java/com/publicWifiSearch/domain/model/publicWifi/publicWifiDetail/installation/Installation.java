@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @RequiredArgsConstructor
 public class Installation implements PublicWifiDetail {
@@ -33,5 +35,10 @@ public class Installation implements PublicWifiDetail {
                 ", installYear='" + installYear + '\'' +
                 ", installDivision='" + installDivision + '\'' +
                 '}';
+    }
+
+    @Override
+    public List<String> toStringAllProperty() {
+        return List.of(this.installLocation, this.installType, this.installOffice, this.installYear, this.installDivision);
     }
 }

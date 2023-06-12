@@ -1,21 +1,19 @@
 package com.publicWifiSearch.domain.repostitory.history;
 
-import com.publicWifiSearch.domain.dto.history.SearchHistoryResponseDto;
 import com.publicWifiSearch.domain.model.history.Coordinate;
 import com.publicWifiSearch.domain.model.history.SearchHistory;
 import com.publicWifiSearch.domain.repostitory.history.queryConstant.SearchHistoryQuery;
-import com.publicWifiSearch.domain.repostitory.publicWifi.Repository;
-import com.publicWifiSearch.domain.repostitory.columnConstant.Column;
-import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.JdbcLauncher;
-import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.ParameterHelper;
-import com.publicWifiSearch.domain.repostitory.publicWifi.jdbcUtil.SqlStatement;
+import com.publicWifiSearch.domain.repostitory.common.Repository;
+import com.publicWifiSearch.domain.repostitory.common.columnConstant.Column;
+import com.publicWifiSearch.domain.repostitory.common.jdbcUtil.JdbcLauncher;
+import com.publicWifiSearch.domain.repostitory.common.jdbcUtil.ParameterHelper;
+import com.publicWifiSearch.domain.repostitory.common.jdbcUtil.SqlStatement;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class SearchHistoryRepository extends Repository<SearchHistory> {
     private JdbcLauncher jdbcLauncher;
@@ -27,7 +25,6 @@ public class SearchHistoryRepository extends Repository<SearchHistory> {
     @Override
     public void save(SearchHistory searchHistory) throws SQLException {
         SqlStatement sqlStatement = connection -> connection.prepareStatement(SearchHistoryQuery.SAVE_QUERY);
-        System.out.println(searchHistory);
         ParameterHelper parameterHelper = (preparedStatement) -> {
             preparedStatement.setInt(Column.FIRST.getPosition(), searchHistory.getId());
             preparedStatement.setDouble(Column.SECOND.getPosition(),searchHistory.getCoordinate().getX());

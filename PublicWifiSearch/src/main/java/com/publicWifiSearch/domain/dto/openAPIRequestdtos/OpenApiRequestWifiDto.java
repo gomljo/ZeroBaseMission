@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 @JsonAdapter(WifiDeserializer.class)
-public class JsonRequestWifiDto implements Dto<Wifi> {
+public class OpenApiRequestWifiDto implements Dto<Wifi> {
 
     private String wifiName;
     private double coordinateX;
@@ -22,7 +22,7 @@ public class JsonRequestWifiDto implements Dto<Wifi> {
     private String service;
     private String dateOfWork;
     @Builder
-    public JsonRequestWifiDto(String wifiName, double coordinateX, double coordinateY, String connectionEnvironment, String networkType, String service, String dateOfWork) {
+    public OpenApiRequestWifiDto(String wifiName, double coordinateX, double coordinateY, String connectionEnvironment, String networkType, String service, String dateOfWork) {
         this.wifiName = wifiName;
         this.coordinateX = coordinateX;
         this.coordinateY = coordinateY;

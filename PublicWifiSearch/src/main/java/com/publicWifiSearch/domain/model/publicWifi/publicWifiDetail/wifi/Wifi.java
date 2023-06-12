@@ -1,9 +1,12 @@
 package com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.wifi;
 
+import com.publicWifiSearch.domain.model.history.Coordinate;
 import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.PublicWifiDetail;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
@@ -27,6 +30,12 @@ public class Wifi implements PublicWifiDetail {
         this.dateOfWork = dateOfWork;
     }
 
+    public double calculateDistance(Coordinate coordinate){
+        double differenceX = Math.pow(Math.abs(coordinate.getX()-this.coordinateX), 2);
+        double differenceY = Math.pow(Math.abs(coordinate.getY() - this.coordinateY), 2);
+        return Math.sqrt(differenceX + differenceY);
+    }
+
     @Override
     public String toString() {
         return "Wifi{" +
@@ -38,5 +47,13 @@ public class Wifi implements PublicWifiDetail {
                 ", service='" + service + '\'' +
                 ", dateOfWork='" + dateOfWork + '\'' +
                 '}';
+    }
+
+    @Override
+    public List<String> toStringAllProperty() {
+        String coordinateX = String.format("%.2f", this.coordinateX);
+        String coordinateY = String.format("%.2f", this.coordinateY);
+
+        return List.of(this.wifiName, coordinateX, coordinateY,this.connectionEnvironment, this.networkType, this.service, this.dateOfWork);
     }
 }

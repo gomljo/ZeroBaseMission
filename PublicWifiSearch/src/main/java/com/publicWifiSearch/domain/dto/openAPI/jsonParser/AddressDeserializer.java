@@ -1,21 +1,22 @@
 package com.publicWifiSearch.domain.dto.openAPI.jsonParser;
 
+import com.publicWifiSearch.domain.dto.constant.PublicWifiFeature;
+import com.publicWifiSearch.domain.dto.openAPIRequestdtos.OpenApiRequestAddressDto;
 import com.google.gson.*;
-import com.publicWifiSearch.domain.dto.jsonRequestdtos.JsonRequestAddressDto;
 
 import java.lang.reflect.Type;
 
-public class AddressDeserializer implements JsonDeserializer<JsonRequestAddressDto> {
+public class AddressDeserializer implements JsonDeserializer<OpenApiRequestAddressDto> {
 
     @Override
-    public JsonRequestAddressDto deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public OpenApiRequestAddressDto deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 
         JsonObject openApiData = (JsonObject) json.getAsJsonObject();
 
-        return JsonRequestAddressDto.builder()
-                .district(openApiData.get("X_SWIFI_WRDOFC").getAsString())
-                .roadAddress(openApiData.get("X_SWIFI_ADRES1").getAsString())
-                .detailAddress(openApiData.get("X_SWIFI_ADRES2").getAsString())
+        return OpenApiRequestAddressDto.builder()
+                .district(openApiData.get(PublicWifiFeature.DISTRICT.getOpenApiFeatureName()).getAsString())
+                .roadAddress(openApiData.get(PublicWifiFeature.ROAD_ADDRESS.getOpenApiFeatureName()).getAsString())
+                .detailAddress(openApiData.get(PublicWifiFeature.DETAIL_ADDRESS.getOpenApiFeatureName()).getAsString())
                 .build();
     }
 }

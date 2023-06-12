@@ -2,11 +2,12 @@ package com.publicWifiSearch.domain.model.publicWifi;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.PublicWifiDetail;
+import com.publicWifiSearch.domain.model.history.Coordinate;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @RequiredArgsConstructor
@@ -14,11 +15,7 @@ public class PublicWifiRecord{
     @SerializedName("row")
     @Expose
     private List<PublicWifi> publicWifiData;
-    private static final String ADDRESS = "address";
-    private static final String INSTALLATION = "installation";
-    private static final String WIFI = "wifi";
-
-
+    private static final int NUMBER_OF_SEARCH_PUBLIC_WIFI=20;
     public PublicWifiRecord(List<PublicWifi> publicWifiData) {
         this.publicWifiData = publicWifiData;
     }
@@ -27,22 +24,16 @@ public class PublicWifiRecord{
         return publicWifiData;
     }
 
-    public Map<String, HashMap<String, PublicWifiDetail>> getPublicWifiMap(){
-        Map<String, HashMap<String, PublicWifiDetail>> publicWifiMap = new HashMap<>();
-
-        HashMap<String, PublicWifiDetail> addressHashMap = new HashMap<>();
-        HashMap<String, PublicWifiDetail> installationMap = new HashMap<>();
-        HashMap<String, PublicWifiDetail> wifiHashMap = new HashMap<>();
-        publicWifiMap.put(ADDRESS, addressHashMap);
-        publicWifiMap.put(INSTALLATION, installationMap);
-        publicWifiMap.put(WIFI, wifiHashMap);
-
+    public void calcDistance(Coordinate coordinate){
         for (PublicWifi publicWifi: publicWifiData){
-            publicWifiMap.get(ADDRESS).put(publicWifi.getManagementId(), publicWifi.getAddress());
-            publicWifiMap.get(INSTALLATION).put(publicWifi.getManagementId(), publicWifi.getInstallation());
-            publicWifiMap.get(WIFI).put(publicWifi.getManagementId(), publicWifi.getWifi());
+            publicWifi.calcDistance(coordinate);
         }
-        return Collections.unmodifiableMap(publicWifiMap);
+    }
+    public List<PublicWifi> findNearestPublicWifi(){
+        return publicWifiData.stream()
+                .sorted(Comparator.comparing(PublicWifi::getDistance))
+                .limit(NUMBER_OF_SEARCH_PUBLIC_WIFI)
+                .collect(Collectors.toList());
     }
 
     @Override

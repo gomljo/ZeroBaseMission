@@ -1,4 +1,4 @@
-package com.publicWifiSearch.domain.repostitory.publicWifi.constant;
+package com.publicWifiSearch.domain.repostitory.publicWifi.queryConstant;
 
 public final class PublicWifiQuery {
     public static final String TABLE_NAME = "public_wifi";
@@ -10,7 +10,7 @@ public final class PublicWifiQuery {
     public static final String FROM = String.format("%s%s%s ", " from ", TABLE_NAME, " pw");
     public static final String JOIN_ADDRESS = " left outer join address addr on pw.address_Id = addr.address_Id";
     public static final String JOIN_INSTALLATION = " left outer join installation install on pw.installation_Id = install.installation_Id ";
-    public static final String JOIN_WIFI = " left outer join wifi on pw.wifi_Id = wifi.wifi_Id limit(10)";
+    public static final String JOIN_WIFI = " left outer join wifi on pw.wifi_Id = wifi.wifi_Id";
     public static final String SELECT_ALL_QUERY = String.format("%s%s%s%s%s%s%s%s%s","select ", SELECTED_COLUMNS_PUBLIC_WIFI, SELECTED_COLUMNS_ADDRESS, SELECTED_COLUMNS_INSTALLATION, SELECTED_COLUMNS_WIFI, FROM, JOIN_ADDRESS, JOIN_INSTALLATION, JOIN_WIFI);
     public static final String DELETE_ALL_QUERY = String.format("%s%s", "delete from ", TABLE_NAME);
     public static final String SELECT_BY_MANAGEMENT_ID_QUERY = String.format("%s%s%s%s", "select managementId from ", TABLE_NAME, " where managementId = ", "(?)");

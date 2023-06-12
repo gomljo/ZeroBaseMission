@@ -16,19 +16,12 @@
 <body>
 
 <div id="navigator">
+
     <button type="button" id="homeButton"><%="홈" %></button>
 
     <button type="button"
-            id="history-button"
-            onclick=""
-    >
+            id="history-button">
       <%="위치 히스토리" %>
-    </button>
-
-    <button type="button"
-            id="bookMark-button"
-            >
-      <%="북마크" %>
     </button>
 
     <button
@@ -40,9 +33,23 @@
         <%="공공 와이파이 정보 갱신" %>
     </button>
 
+    <button
+            type="button"
+            id="bookmark-button">
+        <%="북마크 보기" %>
+    </button>
+
+    <button
+            type="button"
+            id="bookmarkGroup-button">
+    <%="북마크 그룹 관리" %>
+    </button>
+
 </div>
 
 </body>
 <script type="text/javascript" src="../js/searchHistory/SearchHistoryRequest.js"></script>
 <script type="text/javascript" src="../js/returnToHome.js"></script>
+<script type="text/javascript" src="../js/homepage/BookmarkPage.js"></script>
+<script type="text/javascript" src="../js/homepage/BookmarkGroupPage.js"></script>
 </html>

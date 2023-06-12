@@ -1,21 +1,19 @@
 package com.publicWifiSearch.service;
 
-import com.publicWifiSearch.domain.dto.jsonRequestdtos.JsonRequestPublicWifiRecordDto;
+import com.publicWifiSearch.domain.dto.openAPIRequestdtos.OpenApiRequestPublicWifiRecordDto;
+import com.publicWifiSearch.domain.model.history.Coordinate;
 import com.publicWifiSearch.domain.model.publicWifi.PublicWifi;
 import com.publicWifiSearch.domain.model.publicWifi.PublicWifiRecord;
-import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.PublicWifiDetail;
 import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.address.Address;
 import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.installation.Installation;
 import com.publicWifiSearch.domain.model.publicWifi.publicWifiDetail.wifi.Wifi;
-import com.publicWifiSearch.domain.repostitory.dbConnection.DbConnectionMaker;
-import com.publicWifiSearch.domain.repostitory.publicWifi.PublicWifiRepository;
-import com.publicWifiSearch.domain.repostitory.publicWifi.Repository;
+import com.publicWifiSearch.domain.repostitory.common.dbConnection.DbConnectionMaker;
+import com.publicWifiSearch.domain.repostitory.publicWifi.publicWifi.PublicWifiRepository;
+import com.publicWifiSearch.domain.repostitory.common.Repository;
 import com.publicWifiSearch.domain.repostitory.publicWifi.publicWifiDetail.address.AddressRepository;
 import com.publicWifiSearch.domain.repostitory.publicWifi.publicWifiDetail.installation.InstallationRepository;
 import com.publicWifiSearch.domain.repostitory.publicWifi.publicWifiDetail.wifi.WifiRepository;
-//import com.publicWifiSearch.domain.repostitory.publicWifi.address.AddressRepository;
 
-import javax.swing.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,12 +29,13 @@ public class PublicWifiService {
     private List<Address> addressList;
     private List<Installation> installationList;
     private List<Wifi> wifiList;
+    private boolean isEmptyRepository = true;
     public PublicWifiService(DbConnectionMaker dbConnectionMaker) {
         this.dbConnectionMaker = dbConnectionMaker;
     }
 
-    private void collectOpenApiRequest(List<JsonRequestPublicWifiRecordDto> openApiRequestDto){
-        for (JsonRequestPublicWifiRecordDto jsonRequestDto: openApiRequestDto) {
+    private void collectOpenApiRequest(List<OpenApiRequestPublicWifiRecordDto> openApiRequestDto){
+        for (OpenApiRequestPublicWifiRecordDto jsonRequestDto: openApiRequestDto) {
             PublicWifiRecord publicWifiRecord = jsonRequestDto.toEntity();
             publicWifiTotal.addAll(publicWifiRecord.getPublicWifiData());
         }
@@ -65,12 +64,16 @@ public class PublicWifiService {
             makeConnection();
             if(this.connection!=null){
                 repository.connectDataBaseWith(this.connection);
+                repository.deleteAll();
             }
-            repository.save(eachRequestResult);
-            closeConnection();
+            repository.saveByBatch(eachRequestResult);
+
         }
         catch (NullPointerException | SQLException exception){
             throw new RuntimeException(exception);
+        }
+        finally {
+            closeConnection();
         }
     }
 
@@ -81,33 +84,41 @@ public class PublicWifiService {
                 repository.connectDataBaseWith(this.connection);
             }
             repository.deleteAll();
-            closeConnection();
+
         }
         catch (NullPointerException | SQLException exception){
             throw new RuntimeException(exception);
         }
+        finally {
+            closeConnection();
+        }
     }
+
 
     public int getNumberOfData(){
         return publicWifiTotal.size();
     }
 
-    public void saveOpenApiRequest(List<JsonRequestPublicWifiRecordDto> openApiRequestDto){
+    public void saveOpenApiRequest(List<OpenApiRequestPublicWifiRecordDto> openApiRequestDto){
         AddressRepository addressRepository = new AddressRepository();
         InstallationRepository installationRepository = new InstallationRepository();
         WifiRepository wifiRepository = new WifiRepository();
         PublicWifiRepository publicWifiRepository = new PublicWifiRepository();
 
         try {
+
             collectOpenApiRequest(openApiRequestDto);
             splitOpenApiRequest();
+            saveEachRepository(publicWifiRepository, publicWifiTotal);
             saveEachRepository(addressRepository, addressList);
             saveEachRepository(installationRepository, installationList);
             saveEachRepository(wifiRepository, wifiList);
-            saveEachRepository(publicWifiRepository, publicWifiTotal);
         }
         catch (NullPointerException nullPointerException){
             throw new RuntimeException(nullPointerException);
+        }
+        finally {
+            closeConnection();
         }
     }
 
@@ -125,19 +136,30 @@ public class PublicWifiService {
         catch (NullPointerException nullPointerException){
             throw new RuntimeException(nullPointerException);
         }
+        finally {
+            closeConnection();
+        }
     }
 
     public PublicWifiRecord findByManagementId(String managementId) {
         return null;
     }
 
-//    public PublicWifiRecord findAll(){
-//        PublicWifiRecord publicWifiRecord;
-//        connectDatabaseEach();
-//    }
-//
-//    public List<PublicWifi> findNearestTwentyWifi(){
-//
-//    }
+    public <PublicWifiType> List<PublicWifiType> findAll(Repository<PublicWifiType> repository) {
+        List<PublicWifiType> publicWifiTypeBundle;
+        makeConnection();
+        repository.connectDataBaseWith(connection);
+        publicWifiTypeBundle = repository.findAll();
+        closeConnection();
+        return publicWifiTypeBundle;
+    }
+
+    public List<PublicWifi> findNearestWifi(Coordinate coordinate){
+        Repository<PublicWifi> repository = new PublicWifiRepository();
+        List<PublicWifi> foundPublicWifi = findAll(repository);
+        PublicWifiRecord publicWifiRecord = new PublicWifiRecord(foundPublicWifi);
+        publicWifiRecord.calcDistance(coordinate);
+        return publicWifiRecord.findNearestPublicWifi();
+    }
 
 }

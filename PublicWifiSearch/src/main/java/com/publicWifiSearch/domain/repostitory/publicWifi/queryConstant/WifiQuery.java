@@ -1,4 +1,4 @@
-package com.publicWifiSearch.domain.repostitory.publicWifi.constant;
+package com.publicWifiSearch.domain.repostitory.publicWifi.queryConstant;
 
 public final class WifiQuery {
     public static final String TABLE_NAME = "wifi";

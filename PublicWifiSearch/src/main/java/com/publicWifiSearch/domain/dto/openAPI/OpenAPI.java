@@ -1,12 +1,9 @@
 package com.publicWifiSearch.domain.dto.openAPI;
 
+import com.publicWifiSearch.domain.dto.openAPIRequestdtos.OpenApiRequestPublicWifiRecordDto;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.publicWifiSearch.domain.dto.PublicWifiDto;
-import com.publicWifiSearch.domain.dto.jsonRequestdtos.JsonRequestPublicWifiDto;
-import com.publicWifiSearch.domain.dto.jsonRequestdtos.JsonRequestPublicWifiRecordDto;
-import com.publicWifiSearch.domain.model.publicWifi.PublicWifiRecord;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,6 +18,7 @@ public class OpenAPI {
     private static final Object EMPTY = null;
     private static final String FORMAT = "UTF-8";
     private static final String NUMBER_OF_TOTAL_DATA = "list_total_count";
+    private static final String KEY_FOR_DATA_IN_JSON = "row";
     private URL url;
     private HttpURLConnection connection;
     private String rawJson;
@@ -87,15 +85,16 @@ public class OpenAPI {
 
         return this.wifiInformation.get(NUMBER_OF_TOTAL_DATA).getAsInt();
     }
-    public JsonRequestPublicWifiRecordDto convertToJson(){
+    public OpenApiRequestPublicWifiRecordDto convertToJson(){
         Gson gson = new Gson();
         parseRawJson();
         parseWifiInformationFromJson();
-        return gson.fromJson(this.wifiInformation, JsonRequestPublicWifiRecordDto.class);
+        return gson.fromJson(this.wifiInformation, OpenApiRequestPublicWifiRecordDto.class);
     }
 
-    public JsonRequestPublicWifiRecordDto request(URLMaker urlMaker){
-        JsonRequestPublicWifiRecordDto publicWifiRecordDto = new JsonRequestPublicWifiRecordDto();
+
+    public OpenApiRequestPublicWifiRecordDto request(URLMaker urlMaker){
+        OpenApiRequestPublicWifiRecordDto publicWifiRecordDto = new OpenApiRequestPublicWifiRecordDto();
         try{
             makeURL(urlMaker);
             makeHttpConnection();
