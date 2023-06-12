@@ -24,10 +24,6 @@ public class BookmarkSaveServlet extends HttpServlet {
         request.setCharacterEncoding("utf-8");
         String bookmarkFeatureName = BookmarkFeature.getFeatureNameForService();
 
-        System.out.println(request.getParameter("wifiName"));
-        System.out.println(request.getParameter("bookmarkGroupId"));
-        System.out.println(request.getParameter("enrollmentTime"));
-
         String bookmarkGroupId = request.getParameter("bookmarkGroupId");
         String wifiName = request.getParameter("wifiName");
         String enrollmentTime = request.getParameter("enrollmentTime");

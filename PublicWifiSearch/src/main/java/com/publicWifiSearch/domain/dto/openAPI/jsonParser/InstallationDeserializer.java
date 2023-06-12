@@ -1,5 +1,6 @@
 package com.publicWifiSearch.domain.dto.openAPI.jsonParser;
 
+import com.publicWifiSearch.domain.dto.constant.PublicWifiFeature;
 import com.publicWifiSearch.domain.dto.openAPIRequestdtos.OpenApiRequestInstallationDto;
 import com.google.gson.*;
 
@@ -9,13 +10,17 @@ public class InstallationDeserializer implements JsonDeserializer<OpenApiRequest
     @Override
     public OpenApiRequestInstallationDto deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject openApiData = (JsonObject) json.getAsJsonObject();
-
+        String installLocation = PublicWifiFeature.INSTALL_LOCATION.getOpenApiFeatureName();
+        String installType = PublicWifiFeature.INSTALL_TYPE.getOpenApiFeatureName();
+        String installOffice = PublicWifiFeature.INSTALL_OFFICE.getOpenApiFeatureName();
+        String installYear = PublicWifiFeature.INSTALL_YEAR.getOpenApiFeatureName();
+        String installDivision = PublicWifiFeature.INSTALL_YEAR.getOpenApiFeatureName();
         return OpenApiRequestInstallationDto.builder()
-                .installLocation(openApiData.get("X_SWIFI_INSTL_FLOOR").isJsonNull() ? "null": openApiData.get("X_SWIFI_INSTL_FLOOR").getAsString())
-                .installType(openApiData.get("X_SWIFI_INSTL_TY").getAsString())
-                .installOffice(openApiData.get("X_SWIFI_INSTL_MBY").getAsString())
-                .installYear(openApiData.get("X_SWIFI_CNSTC_YEAR").getAsString())
-                .installDivision(openApiData.get("X_SWIFI_INOUT_DOOR").getAsString())
+                .installLocation(openApiData.get(installLocation).isJsonNull() ? "null": openApiData.get(installLocation).getAsString())
+                .installType(openApiData.get(installType).getAsString())
+                .installOffice(openApiData.get(installOffice).getAsString())
+                .installYear(openApiData.get(installYear).getAsString())
+                .installDivision(openApiData.get(installDivision).getAsString())
                 .build();
     }
 }

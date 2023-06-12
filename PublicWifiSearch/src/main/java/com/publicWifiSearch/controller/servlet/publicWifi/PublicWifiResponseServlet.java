@@ -16,17 +16,17 @@ public class PublicWifiResponseServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-//        request.setCharacterEncoding("utf-8");
-//        System.out.println("무야호");
-//        System.out.println(request.getParameter("publicWifiFeatureName"));
-//        System.out.println(request.getParameter("publicWifiFeature"));
-//        String publicWifiDetailFeature = request.getParameter("publicWifiFeatureName");
-//        String publicWifiDetail = request.getParameter("publicWifiFeature");
-//        request.setAttribute(PUBLIC_WIFI_DETAIL_FEATURE, publicWifiDetailFeature);
-//        request.setAttribute(PUBLIC_WIFI_DETAIL, publicWifiDetail);
-//
-//        String viewPath = "/WEB-INF/WifiDetail.jsp";
-//        RequestDispatcher dispatcher = request.getRequestDispatcher(viewPath);
-//        dispatcher.forward(request, response);
+        request.setCharacterEncoding("utf-8");
+        System.out.println("무야호");
+        System.out.println(request.getParameter("publicWifiFeatureName"));
+        System.out.println(request.getParameter("publicWifiFeature"));
+        String publicWifiDetailFeature = request.getParameter("publicWifiFeatureName");
+        String publicWifiDetail = request.getParameter("publicWifiFeature");
+        request.setAttribute(PUBLIC_WIFI_DETAIL_FEATURE, publicWifiDetailFeature);
+        request.setAttribute(PUBLIC_WIFI_DETAIL, publicWifiDetail);
+
+        String viewPath = "/WEB-INF/WifiDetail.jsp";
+        RequestDispatcher dispatcher = request.getRequestDispatcher(viewPath);
+        dispatcher.forward(request, response);
     }
 }

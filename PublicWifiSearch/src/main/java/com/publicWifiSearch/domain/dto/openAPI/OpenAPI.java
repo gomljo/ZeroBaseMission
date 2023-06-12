@@ -15,17 +15,19 @@ import java.net.URL;
 
 public class OpenAPI {
 
-    private static final Object EMPTY = null;
+    private static final Object CONTENT_EMPTY = null;
     private static final String FORMAT = "UTF-8";
     private static final String NUMBER_OF_TOTAL_DATA = "list_total_count";
-    private static final String KEY_FOR_DATA_IN_JSON = "row";
+    private static final String REQUEST_METHOD = "GET";
+    private static final String TYPE = "Content-type";
+    private static final String REQUESTED_FORMAT = "application/json";
+    private static final String SLASH = "/";
+    private static final String EMPTY = "";
     private URL url;
     private HttpURLConnection connection;
     private String rawJson;
     private JsonObject json;
     private JsonObject wifiInformation;
-
-
 
     public OpenAPI() {
 
@@ -43,8 +45,8 @@ public class OpenAPI {
     }
 
     public void connect() throws ProtocolException {
-        this.connection.setRequestMethod("GET");
-        this.connection.setRequestProperty("Content-type", "application/json");
+        this.connection.setRequestMethod(REQUEST_METHOD);
+        this.connection.setRequestProperty(TYPE, REQUESTED_FORMAT);
     }
     public void checkConnectionStatus() throws IOException {
         if(!(HttpURLConnection.HTTP_OK == this.connection.getResponseCode())){
@@ -57,7 +59,7 @@ public class OpenAPI {
         InputStreamReader requestResult = new InputStreamReader(connection.getInputStream(), FORMAT);
         BufferedReader bufferedReader = new BufferedReader(requestResult);
         String jsonContent;
-        while ((jsonContent=bufferedReader.readLine())!=EMPTY){
+        while ((jsonContent=bufferedReader.readLine())!=CONTENT_EMPTY){
             json.append(jsonContent);
         }
         this.rawJson =  json.toString();
@@ -66,7 +68,7 @@ public class OpenAPI {
         this.json = (JsonObject) JsonParser.parseString(this.rawJson);
     }
     private void parseWifiInformationFromJson(){
-        String serviceName = UrlElement.SERVICE_TYPE.toString().replace("/", "");
+        String serviceName = UrlElement.SERVICE_TYPE.toString().replace(SLASH, EMPTY);
         this.wifiInformation =  (JsonObject) (this.json.get(serviceName));
     }
     public int getNumberOfTotalData(URLMaker urlMaker){

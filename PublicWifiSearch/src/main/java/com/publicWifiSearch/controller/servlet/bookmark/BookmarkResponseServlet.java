@@ -23,9 +23,10 @@ public class BookmarkResponseServlet extends HttpServlet {
         request.setCharacterEncoding("utf-8");
         DbConnectionMaker dbConnectionMaker = new SqliteConnectionMaker();
         BookmarkService bookmarkService = new BookmarkService(dbConnectionMaker);
+
         List<Bookmark> bookmarkBundle = bookmarkService.findAll();
         BookmarkResponseDto bookmarkResponseDto = new BookmarkResponseDto(bookmarkBundle);
-        System.out.println("북마크 정보: " +bookmarkResponseDto.toJson());
+
         String bookmarkFeatureName = BookmarkFeature.getFeatureNameForService();
 
         request.setAttribute("bookmarkFeature", bookmarkFeatureName);

@@ -32,7 +32,7 @@ function updateBookmarkGroupRequest(){
     const enrollmentTime = searchDate.concat(searchTime);
     const bookmarkGroupName = document.getElementById("bookmark-group-name-input").value;
     const bookmarkGroupOrder = document.getElementById('bookmark-group-order-input').value;
-    console.log(bookmarkGroupName);
+
     let bookmarkGroupNameInput = document.createElement("input");
     bookmarkGroupNameInput.setAttribute("type", "hidden");
     bookmarkGroupNameInput.setAttribute("name", "bookmarkGroupName");

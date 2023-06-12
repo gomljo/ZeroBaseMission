@@ -10,7 +10,7 @@ public enum UrlElement {
     FORMAT("UTF-8/"),
     SLASH("/");
 
-    private String element;
+    private final String element;
 
     UrlElement(String element){
         this.element = element;

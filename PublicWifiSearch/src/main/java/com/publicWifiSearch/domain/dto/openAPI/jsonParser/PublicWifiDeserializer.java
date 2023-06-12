@@ -1,5 +1,6 @@
 package com.publicWifiSearch.domain.dto.openAPI.jsonParser;
 
+import com.publicWifiSearch.domain.dto.constant.PublicWifiFeature;
 import com.publicWifiSearch.domain.dto.openAPIRequestdtos.OpenApiRequestAddressDto;
 import com.publicWifiSearch.domain.dto.openAPIRequestdtos.OpenApiRequestInstallationDto;
 import com.publicWifiSearch.domain.dto.openAPIRequestdtos.OpenApiRequestPublicWifiDto;
@@ -10,7 +11,7 @@ import java.lang.reflect.Type;
 
 public class PublicWifiDeserializer implements JsonDeserializer<OpenApiRequestPublicWifiDto> {
 
-    private static final String MANAGEMENT_ID = "X_SWIFI_MGR_NO";
+    private static final String MANAGEMENT_ID = PublicWifiFeature.MANAGEMENT_ID.getOpenApiFeatureName();
     @Override
     public OpenApiRequestPublicWifiDto deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject openApiData = (JsonObject) json.getAsJsonObject();
